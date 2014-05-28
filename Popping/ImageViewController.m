@@ -19,6 +19,8 @@
 
 - (void)scaleDownView:(UIView *)view;
 - (void)scaleUpView:(UIView *)view;
+
+@property (assign, nonatomic, getter = isScaledUp) BOOL scaledUp;
 @end
 
 @implementation ImageViewController
@@ -48,6 +50,8 @@
 
     [self.view addSubview:imageView];
     [self scaleDownView:imageView];
+    
+    self.scaledUp = NO;
 }
 
 - (void)touchDown:(UIControl *)sender {
@@ -55,11 +59,14 @@
 }
 
 - (void)touchUpInside:(UIControl *)sender {
-    if (sender.layer.affineTransform.a == 1) {
+    
+    if (self.isScaledUp) {
         [self scaleDownView:sender];
-        return;
+    }else{
+        [self scaleUpView:sender];
     }
-    [self scaleUpView:sender];
+    
+    self.scaledUp = !self.isScaledUp;
 }
 
 - (void)handlePan:(UIPanGestureRecognizer *)recognizer
